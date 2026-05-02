@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-const authSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -69,4 +69,4 @@ authSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword,this.password);
 };
 
-export default mongoose.model("auth", authSchema);
+export default mongoose.model("User", userSchema);

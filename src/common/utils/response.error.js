@@ -20,6 +20,9 @@ static conflict(message="conflict"){
 static notFound(message="notFound"){
     return new ApiError(404,message)
 }
+static forbidden(message="forbidden"){
+    return new ApiError(412,message)
+}
 }
 
 export default ApiError
