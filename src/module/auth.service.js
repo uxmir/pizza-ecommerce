@@ -1,4 +1,4 @@
-import { sendVerificationEmail } from "../common/config/email.js";
+import { sendResetPasswordEmail, sendVerificationEmail } from "../common/config/email.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -87,6 +87,11 @@ const forgotPassword = async (email) => {
     user.resetPasswordToken = hashedToken;
     user.resetPasswordExpires = Date.now() + 15 + 60 + 1000;
     await user.save();
+    try {
+       await sendResetPasswordEmail(email,rawToken) 
+    } catch (error) {
+      throw ApiError.badRequest(error.message)  
+    }
   } catch (error) {
     throw ApiError.badRequest(`internal server error${error.message}`);
   }
