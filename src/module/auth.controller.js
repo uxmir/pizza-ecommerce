@@ -6,5 +6,14 @@ const signup = async (req, res) => {
   if (!user) throw ApiError.badRequest("user is not created");
   ApiResponse.created(res, "user is created", user);
 };
-
-export { signup };
+const login = async (req, res) => {
+  const { user, accessToken, refreshToken } = await AuthService.login(req.body);
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+  ApiResponse.ok(res, "user logged in", { user, accessToken });
+};
+export { signup, login };
