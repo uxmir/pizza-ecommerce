@@ -28,6 +28,7 @@ const authorize = (...roles) => {
     if (!roles.includes(req.user?.role))
       throw ApiError.forbidden("yo have no permission to take this role");
   };
+  next()
 };
 
 export { authenticate, authorize };
