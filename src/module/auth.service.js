@@ -61,7 +61,7 @@ const login = async ({ email, password }) => {
       role: user?.role,
     });
     user.refreshToken = hashToken(refreshToken);
-    await user.save({validateBeforeSave:false});
+    await user.save({ validateBeforeSave: false });
     const userObj = user.toObject();
     delete userObj.password;
     delete userObj.refreshToken;
@@ -71,4 +71,39 @@ const login = async ({ email, password }) => {
   }
 };
 
-export { signup, login };
+const logout = async (userId) => {
+  try {
+    await User.findByIdAndUpdate(userId, { refreshToken: null });
+  } catch (error) {
+    throw ApiError.badRequest(`internal server error${error.message}`);
+  }
+};
+
+const forgotPassword = async (email) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) ApiError.unauthorized("this email is not found in user");
+    const { rawToken, hashedToken } = generateResetToken();
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = Date.now() + 15 + 60 + 1000;
+    await user.save();
+  } catch (error) {
+    throw ApiError.badRequest(`internal server error${error.message}`);
+  }
+};
+const updatePassword = async (token, newPassword) => {
+  try {
+    const hashedToken = hashToken(token);
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() },
+    }).select("+resetPasswordToken +resetPasswordExpires");
+    if (!user) ApiError.unauthorized("user is not found");
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+  } catch (error) {
+    throw ApiError.badRequest(`internal server error${error.message}`);
+  }
+};
+export { signup, login, logout, forgotPassword, updatePassword };
