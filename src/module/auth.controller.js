@@ -6,6 +6,10 @@ const signup = async (req, res) => {
   if (!user) throw ApiError.badRequest("user is not created");
   ApiResponse.created(res, "user is created", user);
 };
+const verifyEmail = async (req, res) => {
+  await AuthService.verifyEmail(req.params.token);
+  ApiResponse.created(res, "user is verified");
+};
 const login = async (req, res) => {
   const { user, accessToken, refreshToken } = await AuthService.login(req.body);
   res.cookie("refreshToken", refreshToken, {
@@ -16,11 +20,11 @@ const login = async (req, res) => {
   });
   ApiResponse.ok(res, "user logged in", { user, accessToken });
 };
-const refreshToken=async(req,res)=>{
-  const token=req.cookies?.refreshToken;
-  const {accessToken}=AuthService.refresh(token)
-  ApiResponse.ok(res,"accessToken has been generated",{accessToken})
-}
+const refreshToken = async (req, res) => {
+  const token = req.cookies?.refreshToken;
+  const { accessToken } = AuthService.refresh(token);
+  ApiResponse.ok(res, "accessToken has been generated", { accessToken });
+};
 const logout = async (req, res) => {
   await AuthService.logout(req.user?.id);
   res.clearCookie("refreshToken");
@@ -34,4 +38,12 @@ const resetPassword = async (req, res) => {
   await AuthService.updatePassword(req.params.token, req.body.password);
   ApiResponse.ok(res, "password is updated");
 };
-export { signup, login, logout, forgotPassword, resetPassword };
+export {
+  signup,
+  login,
+  logout,
+  forgotPassword,
+  resetPassword,
+  refreshToken,
+  verifyEmail,
+};

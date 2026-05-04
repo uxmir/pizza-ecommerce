@@ -48,6 +48,21 @@ const signup = async ({ name, email, password, confirmPassword }) => {
   }
 };
 
+const verifyEmail = async (token) => {
+  try {
+    const trimmed = String(token).trim();
+    if (!trimmed) throw ApiError.unauthorized("token is not auhtorized ");
+    const hashedToken = trimmed;
+    const user = await User.findByIdAndUpdate(
+      { verificationToken: hashedToken },
+      { $set: { isVerified: true }, $unset: { verificationToken: 1 } },
+    );
+    if (!user) throw ApiError.unauthorized("user is not auhtorized ");
+    return user;
+  } catch (error) {
+    throw ApiError.badRequest(`internal server error${error.message}`);
+  }
+};
 const login = async ({ email, password }) => {
   try {
     if (!email || !password)
@@ -84,10 +99,10 @@ const refresh = async (token) => {
     if (user.refreshToken !== hashToken(token))
       throw ApiError.unauthorized("token is not matching with refresh token");
     const accessToken = generateAccessToken({
-      id:user?._id,
-      role:user?.role,
+      id: user?._id,
+      role: user?.role,
     });
-    return {accessToken};
+    return { accessToken };
   } catch (error) {
     throw ApiError.badRequest(`internal server error${error.message}`);
   }
@@ -133,4 +148,12 @@ const resetPassword = async (token, newPassword) => {
   }
 };
 
-export { signup, login, logout, forgotPassword, resetPassword,refresh };
+export {
+  signup,
+  login,
+  logout,
+  forgotPassword,
+  resetPassword,
+  refresh,
+  verifyEmail,
+};
