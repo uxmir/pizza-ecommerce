@@ -1,8 +1,12 @@
-import { sendResetPasswordEmail, sendVerificationEmail } from "../common/config/email.js";
+import {
+  sendResetPasswordEmail,
+  sendVerificationEmail,
+} from "../common/config/email.js";
 import {
   generateAccessToken,
   generateRefreshToken,
   generateResetToken,
+  verifyRefreshToken,
 } from "../common/utils/jwt.js";
 import ApiError from "../common/utils/response.error.js";
 import User from "../module/auth.model.js";
@@ -71,6 +75,23 @@ const login = async ({ email, password }) => {
   }
 };
 
+const refresh = async (token) => {
+  try {
+    if (!token) throw ApiError.unauthorized("token is invalid");
+    const decoded = verifyRefreshToken(token);
+    const user = await User.findById(decoded.id).select("+refreshToken");
+    if (!user) throw ApiError.unauthorized("token is not matching");
+    if (user.refreshToken !== hashToken(token))
+      throw ApiError.unauthorized("token is not matching with refresh token");
+    const accessToken = generateAccessToken({
+      id:user?._id,
+      role:user?.role,
+    });
+    return {accessToken};
+  } catch (error) {
+    throw ApiError.badRequest(`internal server error${error.message}`);
+  }
+};
 const logout = async (userId) => {
   try {
     await User.findByIdAndUpdate(userId, { refreshToken: null });
@@ -88,15 +109,15 @@ const forgotPassword = async (email) => {
     user.resetPasswordExpires = Date.now() + 15 + 60 + 1000;
     await user.save();
     try {
-       await sendResetPasswordEmail(email,rawToken) 
+      await sendResetPasswordEmail(email, rawToken);
     } catch (error) {
-      throw ApiError.badRequest(error.message)  
+      throw ApiError.badRequest(error.message);
     }
   } catch (error) {
     throw ApiError.badRequest(`internal server error${error.message}`);
   }
 };
-const updatePassword = async (token, newPassword) => {
+const resetPassword = async (token, newPassword) => {
   try {
     const hashedToken = hashToken(token);
     const user = await User.findOne({
@@ -111,4 +132,5 @@ const updatePassword = async (token, newPassword) => {
     throw ApiError.badRequest(`internal server error${error.message}`);
   }
 };
-export { signup, login, logout, forgotPassword, updatePassword };
+
+export { signup, login, logout, forgotPassword, resetPassword,refresh };

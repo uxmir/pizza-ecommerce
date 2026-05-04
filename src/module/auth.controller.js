@@ -16,6 +16,11 @@ const login = async (req, res) => {
   });
   ApiResponse.ok(res, "user logged in", { user, accessToken });
 };
+const refreshToken=async(req,res)=>{
+  const token=req.cookies?.refreshToken;
+  const {accessToken}=AuthService.refresh(token)
+  ApiResponse.ok(res,"accessToken has been generated",{accessToken})
+}
 const logout = async (req, res) => {
   await AuthService.logout(req.user?.id);
   res.clearCookie("refreshToken");
@@ -25,8 +30,8 @@ const forgotPassword = async (req, res) => {
   await AuthService.forgotPassword(req.body.email);
   ApiResponse.ok(res, "password restored");
 };
-const updatePassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   await AuthService.updatePassword(req.params.token, req.body.password);
   ApiResponse.ok(res, "password is updated");
 };
-export { signup, login, logout, forgotPassword, updatePassword };
+export { signup, login, logout, forgotPassword, resetPassword };
