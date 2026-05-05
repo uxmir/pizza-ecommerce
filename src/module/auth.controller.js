@@ -22,7 +22,7 @@ const login = async (req, res) => {
 };
 const refreshToken = async (req, res) => {
   const token = req.cookies?.refreshToken;
-  const { accessToken } = AuthService.refresh(token);
+  const { accessToken } = await AuthService.refresh(token);
   ApiResponse.ok(res, "accessToken has been generated", { accessToken });
 };
 const logout = async (req, res) => {

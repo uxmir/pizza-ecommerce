@@ -53,7 +53,7 @@ const verifyEmail = async (token) => {
     const trimmed = String(token).trim();
     if (!trimmed) throw ApiError.unauthorized("token is not auhtorized ");
     const hashedToken = trimmed;
-    const user = await User.findByIdAndUpdate(
+    const user = await User.findByOneAndUpdate(
       { verificationToken: hashedToken },
       { $set: { isVerified: true }, $unset: { verificationToken: 1 } },
     );
@@ -69,7 +69,7 @@ const login = async ({ email, password }) => {
       throw ApiError.notFound("email or password   is missing");
     const user = await User.findOne({ email }).select("+password");
     if (!user) throw ApiError.notFound("this user didn't register");
-    const ismatch = await User.comparePassword(password);
+    const ismatch = await user.comparePassword(password);
     if (!ismatch) throw ApiError.conflict("password is not matching");
     const accessToken = generateAccessToken({
       id: user?._id,
@@ -143,6 +143,7 @@ const resetPassword = async (token, newPassword) => {
     user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
+    await user.save()
   } catch (error) {
     throw ApiError.badRequest(`internal server error${error.message}`);
   }
