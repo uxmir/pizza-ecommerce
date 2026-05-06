@@ -38,6 +38,16 @@ const resetPassword = async (req, res) => {
   await AuthService.updatePassword(req.params.token, req.body.password);
   ApiResponse.ok(res, "password is updated");
 };
+
+const googleAuth = async (req, res) => {
+  const { accessToken, refreshToken } = req.user;
+  res.cookie("refreshToken", refreshToken, {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+  res.redirect(`${process.env.CLIENT_URL}/login-success?token=${accessToken}`);
+};
 export {
   signup,
   login,
@@ -46,4 +56,5 @@ export {
   resetPassword,
   refreshToken,
   verifyEmail,
+  googleAuth
 };

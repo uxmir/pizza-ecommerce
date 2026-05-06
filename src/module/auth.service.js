@@ -143,12 +143,46 @@ const resetPassword = async (token, newPassword) => {
     user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
-    await user.save()
+    await user.save();
   } catch (error) {
     throw ApiError.badRequest(`internal server error${error.message}`);
   }
 };
-
+// google login
+const googleLogin = async (profile) => {
+  try {
+    const user = await User.findOne({
+      $or: [{ googleId: profile?.id }, { email: profile?.emails[0].value }],
+    });
+    if (!user) {
+      user=await User.create({
+        googleId: profile?.id,
+        name: profile?.displayName,
+        email: profile?.emails[0].value,
+        isVerified: true,
+        role: "user",
+      });
+    } else if (!user?.googleId) {
+      user?.googleId = profile?.id;
+      await user.save();
+    }
+    const accessToken = generateAccessToken({
+      id: user?._id,
+      role: user?.role,
+    });
+    const refreshToken = generateRefreshToken({
+      id: user?._id,
+      role: user?.role,
+    });
+    return {
+      user,
+      accessToken,
+      refreshToken,
+    };
+  } catch (error) {
+    throw ApiError.badRequest(`google auth is not working  ${error?.message}`);
+  }
+};
 export {
   signup,
   login,
@@ -157,4 +191,5 @@ export {
   resetPassword,
   refresh,
   verifyEmail,
+  googleLogin,
 };
