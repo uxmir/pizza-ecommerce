@@ -1,6 +1,6 @@
-import ApiError from "../common/utils/response.error";
+import ApiError from "../common/utils/response.error.js";
 import ApiResponse from "../common/utils/response.success.js";
-import AuthService from "../module/auth.service.js";
+import  AuthService from "../module/auth.service.js";
 const signup = async (req, res) => {
   const user = await AuthService.signup(req.body);
   if (!user) throw ApiError.badRequest("user is not created");
@@ -48,7 +48,7 @@ const googleAuth = async (req, res) => {
   });
   res.redirect(`${process.env.CLIENT_URL}/login-success?token=${accessToken}`);
 };
-export {
+export  {
   signup,
   login,
   logout,

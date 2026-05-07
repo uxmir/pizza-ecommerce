@@ -163,7 +163,7 @@ const googleLogin = async (profile) => {
         role: "user",
       });
     } else if (!user?.googleId) {
-      user?.googleId = profile?.id;
+      user.googleId = profile?.id;
       await user.save();
     }
     const accessToken = generateAccessToken({
@@ -183,7 +183,7 @@ const googleLogin = async (profile) => {
     throw ApiError.badRequest(`google auth is not working  ${error?.message}`);
   }
 };
-export {
+export default {
   signup,
   login,
   logout,
