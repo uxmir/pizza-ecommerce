@@ -1,6 +1,6 @@
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
-import AuthService from "../../module/auth.service.js";
+import AuthService from "../../module/auth/auth.service.js";
 passport.use(
   new GoogleStrategy(
     {

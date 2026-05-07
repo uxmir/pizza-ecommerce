@@ -1,6 +1,6 @@
-import { verifyAccessToken } from "../common/utils/jwt.js";
-import ApiError from "../common/utils/response.error.js";
-import User from "../module/auth.model.js";
+import { verifyAccessToken } from "../../common/utils/jwt.js";
+import ApiError from "../../common/utils/response.error.js";
+import User from "./auth.model.js";
 const authenticate = async (req, res, next) => {
   try {
     let token;
@@ -31,4 +31,4 @@ const authorize = (...roles) => {
   };
 };
 
-export { authenticate, authorize };
+export  { authenticate, authorize };

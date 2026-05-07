@@ -1,15 +1,15 @@
 import {
   sendResetPasswordEmail,
   sendVerificationEmail,
-} from "../common/config/email.js";
+} from "../../common/config/email.js";
 import {
   generateAccessToken,
   generateRefreshToken,
   generateResetToken,
   verifyRefreshToken,
-} from "../common/utils/jwt.js";
-import ApiError from "../common/utils/response.error.js";
-import User from "../module/auth.model.js";
+} from "../../common/utils/jwt.js";
+import ApiError from "../../common/utils/response.error.js";
+import User from "./auth.model.js";
 import crypto from "crypto";
 
 const hashToken = (token) =>
