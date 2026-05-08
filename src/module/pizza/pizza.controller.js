@@ -13,5 +13,16 @@ const findAll = async (req, res) => {
     currentPage,
     totalPages,
   });
-};
-export { createdPizza, findAll };
+}; 
+const findById=async(req,res)=>{
+  await PizzaService.findById(req.params.id)
+  ApiResponse.ok(res, "data is found");
+}
+const updateById=async(req,res)=>{
+  await PizzaService.updateById(req.params.id,req.body)
+  ApiResponse.ok(res, "data is updated");
+}
+const deleteById=async(req,res)=>{
+  await PizzaService.deleteById(req.params.id)
+}
+export { createdPizza, findAll,findById,updateById,deleteById };
