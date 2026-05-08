@@ -1,6 +1,6 @@
-import Router from "express";
+import express from "express";
 import passport from "passport";
-const router = Router();
+const router = express.Router();
 import * as AuthController  from "./auth.controller.js";
 import { authenticate } from "./auth.middleware.js";
 router.post("/register", AuthController.signup);
