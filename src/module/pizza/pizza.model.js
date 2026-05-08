@@ -30,6 +30,8 @@ const pizzaSchema = new mongoose.Schema({
     required: [true, "BestSeller is required"],
     default:false
   },
+},{
+  timestamps:true
 });
 
 export default mongoose.model("Pizza",pizzaSchema)

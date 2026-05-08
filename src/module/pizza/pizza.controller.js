@@ -13,16 +13,17 @@ const findAll = async (req, res) => {
     currentPage,
     totalPages,
   });
-}; 
-const findById=async(req,res)=>{
-  await PizzaService.findById(req.params.id)
-  ApiResponse.ok(res, "data is found");
-}
-const updateById=async(req,res)=>{
-  await PizzaService.updateById(req.params.id,req.body)
-  ApiResponse.ok(res, "data is updated");
-}
-const deleteById=async(req,res)=>{
-  await PizzaService.deleteById(req.params.id)
-}
-export { createdPizza, findAll,findById,updateById,deleteById };
+};
+const findById = async (req, res) => {
+  const data = await PizzaService.findById(req.params.id);
+  ApiResponse.ok(res, "data is found", data);
+};
+const updateById = async (req, res) => {
+  const data = await PizzaService.updateById(req.params.id, req.body);
+  ApiResponse.ok(res, "data is updated", data);
+};
+const deleteById = async (req, res) => {
+  await PizzaService.deleteById(req.params.id);
+  ApiResponse.ok(res, "data is deleted successfully");
+};
+export { createdPizza, findAll, findById, updateById, deleteById };
