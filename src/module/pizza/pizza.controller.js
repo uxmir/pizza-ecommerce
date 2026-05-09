@@ -1,7 +1,7 @@
 import * as PizzaService from "./pizza.service.js";
 import ApiResponse from "../../common/utils/response.success.js";
 const createdPizza = async (req, res) => {
-  const pizza = await PizzaService.createPizza(req.user?._id, req.body);
+  const pizza = await PizzaService.createPizza(req.user?._id, req.body,req.file);
   ApiResponse.ok(res, "pizza is created", pizza);
 };
 const findAll = async (req, res) => {
@@ -19,7 +19,7 @@ const findById = async (req, res) => {
   ApiResponse.ok(res, "data is found", data);
 };
 const updateById = async (req, res) => {
-  const data = await PizzaService.updateById(req.params.id, req.body);
+  const data = await PizzaService.updateById(req.params.id, req.body,req.file);
   ApiResponse.ok(res, "data is updated", data);
 };
 const deleteById = async (req, res) => {

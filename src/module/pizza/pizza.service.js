@@ -1,17 +1,23 @@
 import ApiError from "../../common/utils/response.error.js";
+import uploadToImagekit from "../../common/utils/upload.imagekit.js";
 import Pizza from "./pizza.model.js";
 
-const createPizza = async (
-  userId,
-  { title, description, category, price, isBestSeller },
-) => {
+const createPizza = async (userId, data, file) => {
   try {
+    const { title, description, category, price, isBestSeller } = data;
     if (!title || !description || !category || !price)
       throw ApiError.notFound("each feild in pizza is required");
+    //file system
+    let imageUrl = "";
+    if (file) {
+      const response = await uploadToImagekit(file.path,file.filename);
+      imageUrl = response.url;
+    }
     const createPizza = await Pizza.create({
       user: userId,
       title,
       description,
+      image: imageUrl,
       category,
       price: parseInt(price),
       isBestSeller,
@@ -24,7 +30,7 @@ const createPizza = async (
 
 const findAll = async (requestQuery) => {
   try {
-    const { search,category, page = 1, limit = 10 } = requestQuery;
+    const { search, category, page = 1, limit = 10 } = requestQuery;
     const query = {};
     if (search) {
       query.$or = [
@@ -33,8 +39,8 @@ const findAll = async (requestQuery) => {
         { category: { $regex: search, $options: "i" } },
       ];
     }
-    if(category){
-      query.category=category;
+    if (category) {
+      query.category = category;
     }
     const skip = (page - 1) * limit;
     const allData = await Pizza.find(query)
@@ -62,14 +68,17 @@ const findById = async (dataId) => {
   }
 };
 
-const updateById = async (
-  dataId,
-  { title, description, category, price, isBestSeller },
-) => {
+const updateById = async (dataId, data, file) => {
   try {
+    //file system
+    let imageUrl =data?.image;
+    if (file) {
+    const response = await uploadToImagekit(file.path,file.filename);;
+      imageUrl = response.url;
+    }
     const updateData = await Pizza.findByIdAndUpdate(
       dataId,
-      { title, description, category, price, isBestSeller },
+      { ...data, image: imageUrl },
       { returnDocument: "after", runValidators: true },
     );
     return updateData;
