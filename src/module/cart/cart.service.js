@@ -17,8 +17,6 @@ const createCart = async (userId, allData, file) => {
       data:
         addedData?.length > 1 ? [...addedData, new Set(addedData)] : addedData,
     })
-      .populate("user", "email")
-      .sort({ createdAt: -1 });
     const totalData = await Cart.countDocuments(cart);
     return {
       cart,
@@ -31,7 +29,7 @@ const createCart = async (userId, allData, file) => {
 //getAll
 const findAllCart = async () => {
   try {
-    const getCartAll = await Cart.find();
+    const getCartAll = await Cart.find().populate("user", "email").sort({ createdAt: -1 });
     return {
       getCartAll,
       totalCart: getCartAll?.length,
