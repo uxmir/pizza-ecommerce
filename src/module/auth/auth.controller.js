@@ -8,7 +8,7 @@ const signup = async (req, res) => {
 };
 const verifyEmail = async (req, res) => {
   await AuthService.verifyEmail(req.params.token);
-  ApiResponse.created(res, "user is verified");
+  ApiResponse.ok(res, "user is verified");
 };
 const login = async (req, res) => {
   const { user, accessToken, refreshToken } = await AuthService.login(req.body);

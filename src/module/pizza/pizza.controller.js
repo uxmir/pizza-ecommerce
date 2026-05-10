@@ -2,7 +2,7 @@ import * as PizzaService from "./pizza.service.js";
 import ApiResponse from "../../common/utils/response.success.js";
 const createdPizza = async (req, res) => {
   const pizza = await PizzaService.createPizza(req.user?._id, req.body,req.file);
-  ApiResponse.ok(res, "pizza is created", pizza);
+  ApiResponse.created(res, "pizza is created", pizza);
 };
 const findAll = async (req, res) => {
   const { allData, totalData, currentPage, totalPages } =
