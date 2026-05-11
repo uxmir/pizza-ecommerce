@@ -11,6 +11,11 @@ const cartSchema = new mongoose.Schema(
       ref: "Pizza",
       required: [true, "Pizza data is required"],
     },
+    quantity:{
+      type:Number,
+      required:[true,"Quantity is required"],
+      default:1
+    }
   },
   {
     timestamps: true,

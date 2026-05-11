@@ -2,34 +2,27 @@ import ApiError from "../../common/utils/response.error.js";
 import uploadToImagekit from "../../common/utils/upload.imagekit.js";
 import Cart from "./cart.model.js";
 
-const createCart = async (userId, allData, file) => {
+const createCart = async (userId,dataId) => {
   try {
-    if (!user || !allData || !file)
-      throw ApiError.notFound("USer or pizzadata or image is missing");
-    let imageUrl = data?.image;
-    if (file) {
-      const response = await uploadToImagekit(file.path, file.filename);
-      imageUrl = response.url;
+   let cartItem=await Cart.findOne({user:userId,pizza:dataId})
+   if(cartItem){
+    cartItem.quantity+=1
+     return  await  cartItem.save()
+   }else{
+   return  await Cart.create({
+      user:userId,
+      pizza:dataId
     }
-    const addedData = [...allData, imageUrl];
-    const cart = await Cart.create({
-      user: userId,
-      data:
-        addedData?.length > 1 ? [...addedData, new Set(addedData)] : addedData,
-    })
-    const totalData = await Cart.countDocuments(cart);
-    return {
-      cart,
-      totalData,
-    };
+    )
+   }
   } catch (error) {
     throw ApiError.badRequest(`cart is not added ${error?.message}`);
   }
 };
 //getAll
-const findAllCart = async () => {
+const findAllCart = async (userId) => {
   try {
-    const getCartAll = await Cart.find().populate("user", "email").sort({ createdAt: -1 });
+    const getCartAll = await Cart.find({user:userId}).populate("user", "email").populate("pizza").sort({ createdAt: -1 });
     return {
       getCartAll,
       totalCart: getCartAll?.length,

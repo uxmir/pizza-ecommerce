@@ -3,7 +3,7 @@ const router = express.Router();
 import { authenticate, authorize } from "../auth/auth.middleware.js";
 import * as CartController from "./cart.controller.js";
 router.post(
-  "/create",
+  "/create/:id",
   authenticate,
   authorize("user"),
   CartController.createCart,
