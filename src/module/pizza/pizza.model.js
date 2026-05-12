@@ -25,6 +25,10 @@ const pizzaSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Price is required"],
   },
+  discount:{
+  type:Number,
+  default:0
+  },
   isBestSeller: {
     type: Boolean,
     required: [true, "BestSeller is required"],

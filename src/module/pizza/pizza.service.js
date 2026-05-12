@@ -21,6 +21,7 @@ const createPizza = async (userId, data, file) => {
       category,
       price: parseInt(price),
       isBestSeller,
+      discount
     });
     return createPizza;
   } catch (error) {

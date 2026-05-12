@@ -1,28 +1,42 @@
 import ApiError from "../../common/utils/response.error.js";
 import uploadToImagekit from "../../common/utils/upload.imagekit.js";
+import Pizza from "../pizza/pizza.model.js";
 import Cart from "./cart.model.js";
 
-const createCart = async (userId,dataId) => {
+const createCart = async (userId, dataId) => {
   try {
-   let cartItem=await Cart.findOne({user:userId,pizza:dataId})
-   if(cartItem){
-    cartItem.quantity+=1
-     return  await  cartItem.save()
-   }else{
-   return  await Cart.create({
-      user:userId,
-      pizza:dataId
+    const pizzaDetails = await Pizza.findById(dataId);
+    const originalPrice = pizzaDetails?.price;
+    const discount = pizzaDetails?.discount || 0;
+    const discountPrice =
+      discount > 0
+        ? originalPrice - (discount / 100) * originalPrice
+        : originalPrice;
+    const cartItem = await Cart.findOne({ user: userId, pizza: dataId });
+    if (cartItem) {
+      cartItem?.quantity += 1;
+      cartItem?.price = Math.round(discountPrice * cartItem?.quantity);
+      return await cartItem.save();
+    } else {
+      return await Cart.create({
+        user: userId,
+        pizza: dataId,
+        quantity: 1,
+        price: Math.round(discountPrice),
+      });
     }
-    )
-   }
   } catch (error) {
     throw ApiError.badRequest(`cart is not added ${error?.message}`);
   }
 };
+
 //getAll
 const findAllCart = async (userId) => {
   try {
-    const getCartAll = await Cart.find({user:userId}).populate("user", "email").populate("pizza").sort({ createdAt: -1 });
+    const getCartAll = await Cart.find({ user: userId })
+      .populate("user", "email")
+      .populate("pizza")
+      .sort({ createdAt: -1 });
     return {
       getCartAll,
       totalCart: getCartAll?.length,
@@ -42,4 +56,4 @@ const deleteCart = async (dataId) => {
   }
 };
 
-export { createCart, deleteCart,findAllCart };
+export { createCart, deleteCart, findAllCart };
