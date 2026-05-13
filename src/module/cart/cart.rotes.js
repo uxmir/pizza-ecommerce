@@ -8,6 +8,18 @@ router.post(
   authorize("user"),
   CartController.createCart,
 );
+router.post(
+  "/increase-cart/:id",
+  authenticate,
+  authorize("user"),
+  CartController.increaseCart,
+);
+router.post(
+  "/descrease-cart/:id",
+  authenticate,
+  authorize("user"),
+  CartController.descreaseCart
+)
 router.get(
   "/get-all",
   authenticate,

@@ -5,6 +5,19 @@ import Cart from "./cart.model.js";
 
 const createCart = async (userId, dataId) => {
   try {
+    const pizza = await Cart.findOne({ user: userId, pizza: dataId });
+    if (pizza) throw ApiError.conflict("data is created");
+    const createdData = await Pizza.create({
+      user: userId,
+      pizza: dataId,
+    });
+    return createdData;
+  } catch (error) {
+    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+  }
+};
+const increaseCart = async (userId, dataId) => {
+  try {
     const pizzaDetails = await Pizza.findById(dataId);
     const originalPrice = pizzaDetails?.price;
     const discount = pizzaDetails?.discount || 0;
@@ -29,7 +42,20 @@ const createCart = async (userId, dataId) => {
     throw ApiError.badRequest(`cart is not added ${error?.message}`);
   }
 };
-
+const descreaseCart = async (userId, dataId) => {
+  try {
+    const cartItem = await Cart.findOne({ user: userId, pizza: dataId });
+    if (cartItem?.quantity > 0) {
+      cartItem?.quantity -= 1;
+      return await cartItem.save();
+    } else {
+      cartItem?.quantity = 0;
+      return await cartItem.save();
+    }
+  } catch (error) {
+    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+  }
+};
 //getAll
 const findAllCart = async (userId) => {
   try {
@@ -56,4 +82,4 @@ const deleteCart = async (dataId) => {
   }
 };
 
-export { createCart, deleteCart, findAllCart };
+export { createCart, increaseCart, descreaseCart, deleteCart, findAllCart };
