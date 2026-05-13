@@ -27,7 +27,7 @@ router.get(
   CartController.findAllCart,
 );
 router.delete(
-  "/delete",
+  "/delete/:id",
   authenticate,
   authorize("user"),
   CartController.deleteCart,

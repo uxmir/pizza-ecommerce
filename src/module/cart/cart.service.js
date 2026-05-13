@@ -5,11 +5,19 @@ import Cart from "./cart.model.js";
 
 const createCart = async (userId, dataId) => {
   try {
+    const pizzaDetails = await Pizza.findById(dataId);
+    const originalPrice = pizzaDetails?.price;
+    const discount = pizzaDetails?.discount || 0;
+    const discountPrice =
+      discount > 0
+        ? originalPrice - (discount / 100) * originalPrice
+        : originalPrice;
     const pizza = await Cart.findOne({ user: userId, pizza: dataId });
     if (pizza) throw ApiError.conflict("data is created");
-    const createdData = await Pizza.create({
+    const createdData = await Cart.create({
       user: userId,
       pizza: dataId,
+      price: Math.round(discountPrice),
     });
     return createdData;
   } catch (error) {
@@ -44,13 +52,20 @@ const increaseCart = async (userId, dataId) => {
 };
 const descreaseCart = async (userId, dataId) => {
   try {
+    const pizzaDetails = await Pizza.findById(dataId);
+    const originalPrice = pizzaDetails?.price;
+    const discount = pizzaDetails?.discount || 0;
+    const discountPrice =
+      discount > 0
+        ? originalPrice - (discount / 100) * originalPrice
+        : originalPrice;
     const cartItem = await Cart.findOne({ user: userId, pizza: dataId });
-    if (cartItem?.quantity > 0) {
+    if (cartItem?.quantity > 1) {
       cartItem?.quantity -= 1;
+      cartItem?.price = Math.round(discountPrice * cartItem?.quantity);
       return await cartItem.save();
     } else {
-      cartItem?.quantity = 0;
-      return await cartItem.save();
+      await Cart.findOneAndDelete({ user: userId, pizza: dataId });
     }
   } catch (error) {
     throw ApiError.badRequest(`cart is not added ${error?.message}`);
@@ -75,7 +90,7 @@ const findAllCart = async (userId) => {
 const deleteCart = async (dataId) => {
   try {
     if (!dataId) throw ApiError.notFound("user or data is not found");
-    const deleteCart = await Cart.findOneAndDelete(dataId);
+    const deleteCart = await Cart.findByIdAndDelete(dataId);
     return deleteCart;
   } catch (error) {
     throw ApiError.badRequest(`cart is not added ${error?.message}`);

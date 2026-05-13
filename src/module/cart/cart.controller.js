@@ -6,7 +6,7 @@ const createCart = async (req, res) => {
   ApiResponse.created(res, "car is created", data);
 };
 const increaseCart = async (req, res) => {
-  await CartService.createCart(req.user?._id, req.params.id);
+  await CartService.increaseCart(req.user?._id, req.params.id);
   ApiResponse.created(res, "cart is added");
 };
 const descreaseCart = async (req, res) => {
