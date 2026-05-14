@@ -21,7 +21,7 @@ const createCart = async (userId, dataId) => {
     });
     return createdData;
   } catch (error) {
-    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+    throw ApiError.badRequest(`cart is not created ${error?.message}`);
   }
 };
 const increaseCart = async (userId, dataId) => {
@@ -35,8 +35,8 @@ const increaseCart = async (userId, dataId) => {
         : originalPrice;
     const cartItem = await Cart.findOne({ user: userId, pizza: dataId });
     if (cartItem) {
-      cartItem?.quantity += 1;
-      cartItem?.price = Math.round(discountPrice * cartItem?.quantity);
+      cartItem.quantity += 1;
+      cartItem.price = Math.round(discountPrice * cartItem?.quantity);
       return await cartItem.save();
     } else {
       return await Cart.create({
@@ -47,7 +47,7 @@ const increaseCart = async (userId, dataId) => {
       });
     }
   } catch (error) {
-    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+    throw ApiError.badRequest(`cart is not increased ${error?.message}`);
   }
 };
 const descreaseCart = async (userId, dataId) => {
@@ -60,15 +60,15 @@ const descreaseCart = async (userId, dataId) => {
         ? originalPrice - (discount / 100) * originalPrice
         : originalPrice;
     const cartItem = await Cart.findOne({ user: userId, pizza: dataId });
-    if (cartItem?.quantity > 1) {
-      cartItem?.quantity -= 1;
-      cartItem?.price = Math.round(discountPrice * cartItem?.quantity);
+    if (cartItem.quantity > 1) {
+      cartItem.quantity -= 1;
+      cartItem.price = Math.round(discountPrice * cartItem?.quantity);
       return await cartItem.save();
     } else {
       await Cart.findOneAndDelete({ user: userId, pizza: dataId });
     }
   } catch (error) {
-    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+    throw ApiError.badRequest(`cart is not descreased ${error?.message}`);
   }
 };
 //getAll
@@ -83,7 +83,7 @@ const findAllCart = async (userId) => {
       totalCart: getCartAll?.length,
     };
   } catch (error) {
-    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+    throw ApiError.badRequest(`cart is not found ${error?.message}`);
   }
 };
 //delete cart
@@ -93,7 +93,7 @@ const deleteCart = async (dataId) => {
     const deleteCart = await Cart.findByIdAndDelete(dataId);
     return deleteCart;
   } catch (error) {
-    throw ApiError.badRequest(`cart is not added ${error?.message}`);
+    throw ApiError.badRequest(`cart is not deleted ${error?.message}`);
   }
 };
 
