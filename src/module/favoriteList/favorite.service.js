@@ -28,7 +28,7 @@ const findFavoriteList = async (userId, requestQuery) => {
     } = requestQuery;
     const query = {};
     if (search) {
-      query.$or = [
+      query.$or = [ 
         { title: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
       ];

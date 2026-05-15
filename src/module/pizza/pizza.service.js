@@ -34,19 +34,15 @@ const findAll = async (requestQuery) => {
     const { search, category, page = 1, limit = 10 } = requestQuery;
     const query = {};
     if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
-        { category: { $regex: search, $options: "i" } },
-      ];
+     query.$text={$search:search}
     }
     if (category) {
       query.category = category;
     }
     const skip = (page - 1) * limit;
-    const allData = await Pizza.find(query)
+    const allData = await Pizza.find(query) 
       .populate("user", "email")
-      .sort({ createdAt: -1 })
+      .sort(search?{score:{$meta:"textScore"}}:{ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
     const totalData = await Pizza.countDocuments(query);

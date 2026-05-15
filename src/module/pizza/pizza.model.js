@@ -20,6 +20,7 @@ const pizzaSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, "Category is required"],
+    index:true
   },
   price: {
     type: Number,
@@ -32,10 +33,12 @@ const pizzaSchema = new mongoose.Schema({
   isBestSeller: {
     type: Boolean,
     required: [true, "BestSeller is required"],
-    default:false
+    default:false,
+    index:true
   },
 },{
   timestamps:true
 });
 
+pizzaSchema.index({title:"text",description:"text",category:"text"})
 export default mongoose.model("Pizza",pizzaSchema)
