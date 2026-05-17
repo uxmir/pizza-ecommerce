@@ -20,7 +20,15 @@ const findAll = async (req, res) => {
 };
 
 const findById = async (req, res) => {
-  await favoriteService.findById(req.params.id);
-  ApiResponse.ok(res,"data fetched")
+  const data = await favoriteService.findById(req.params.id);
+  ApiResponse.ok(res, "data fetched", data);
 };
-export { favorite, findAll, findById };
+const removeById = async (req, res) => {
+  await favoriteService.removeById(req.params.id);
+  ApiResponse.ok(res, "data is deleted");
+};
+const removeAll = async (req, res) => {
+  await favoriteService.removeAll(req.user?._id);
+  ApiResponse.ok(res, "data is deleted");
+};
+export { favorite, findAll, findById, removeById, removeAll };
