@@ -11,6 +11,14 @@ const reviewSchema=new mongoose.Schema({
           ref: "Pizza",
           required: [true, "Pizza data is required"],
         },
+        constent:{
+          type:String,
+          required: [true, "Content data is required"], 
+        },
+        rating:{
+          type:Number,
+         required: [true, "Rating data is required"], 
+        }
 },{
     timestamps:true
 })

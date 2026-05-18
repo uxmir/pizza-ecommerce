@@ -4,6 +4,7 @@ import AuthRoute from './module/auth/auth.routes.js'
 import PizzaRoute from './module/pizza/pizzza.routes.js'
 import CartRoute from './module/cart/cart.rotes.js'
 import FavoriteRoute from './module/favoriteList/favorite.routes.js'
+import ReviewRoute from './module/review/review.routes.js'
 import passport from 'passport'
 import  '../src/common/config/passport.google.auth.js'
 const app =express()
@@ -19,4 +20,6 @@ app.use('/api/v2/pizza',PizzaRoute)
 app.use('/api/v3/cart',CartRoute)
 //favorite
 app.use('/api/v4/favorite',FavoriteRoute)
+//review
+app.use('/api/v5/review',ReviewRoute)
 export default app
