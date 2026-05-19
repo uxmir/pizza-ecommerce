@@ -1,8 +1,9 @@
 import ApiError from "../../common/utils/response.error";
 import Review from "./review.model.js";
 
-const createReview = async (userId, pizzaId, content, rating) => {
+const createReview = async (userId, pizzaId,data) => {
   try {
+    const {content,rating}=data
     if (!userId || !pizzaId || !content || !rating)
       throw ApiError.notFound("user or data or content or rating is missing");
     const createreview = await Review.create({
@@ -11,7 +12,7 @@ const createReview = async (userId, pizzaId, content, rating) => {
       content,
       rating: parseFloat(rating),
     });
-    return createReview;
+    return createreview;
   } catch (error) {
     throw ApiError.badRequest(`Error is ${error?.message}`);
   }
@@ -19,8 +20,8 @@ const createReview = async (userId, pizzaId, content, rating) => {
 
 const findAll = async (pizzaId) => {
   try {
-    if (!pizzaId) throw ApiError.unauthorized("user is invalid");
-    const findAll = await Review.find({ pizza: pizzaId });
+    if (!pizzaId) throw ApiError.unauthorized("Data is invalid");
+    const findAll = await Review.find({ pizza: pizzaId }).populate("user","email");
     return findAll;
   } catch (error) {
     throw ApiError.badRequest(`Error is ${error?.message}`);
@@ -29,20 +30,20 @@ const findAll = async (pizzaId) => {
 const findForUser = async (userId) => {
   try {
     if (!userId) throw ApiError.notFound("user   is missing");
-    const findForUser = await Review.find({ user: userId });
+    const findForUser = await Review.find({ user: userId }).populate("pizza");
     return findForUser;
   } catch (error) {
     throw ApiError.badRequest(`Error is ${error?.message}`);
   }
 };
 
-const updateReview = async (pizzaId, data) => {
+const updateReview = async (reviewId,userId,data) => {
   try {
-    if (!pizzaId || !data) throw ApiError.notFound("pizza or data is missing");
-    const updateData = await Review.findByIdAndUpdate(
-      { pizza: pizzaId },
-      data,
-      { returnDocument: "after", runValidators: true },
+    if (!reviewId || !userId || !data) throw ApiError.notFound("pizza or data is missing");
+    const updateData = await Review.findOneAndUpdate(
+      { _id: reviewId,user:userId },
+      {content:data?.content,rating:data?.rating},
+      { new:true, runValidators: true },
     );
     return updateData;
   } catch (error) {
@@ -50,10 +51,10 @@ const updateReview = async (pizzaId, data) => {
   }
 };
 
-const deleteById = async (pizzaId) => {
+const deleteById = async (reviewId,userId) => {
   try {
-    if (!pizzaId) throw ApiError.notFound("pizza data is missing");
-    const deleteId = await Review.findByIdAndDelete(pizzaId);
+    if (!reviewId || !userId) throw ApiError.notFound("pizza data is missing");
+    const deleteId = await Review.findOneAndDelete({_id:reviewId,user:userId});
     return deleteId;
   } catch (error) {
     throw ApiError.badRequest(`Error is ${error?.message}`);
@@ -69,4 +70,11 @@ const deleteAll = async (userId) => {
     throw ApiError.badRequest(`Error is ${error?.message}`);
   }
 };
-export { createReview, findAll, findForUser, updateReview, deleteById,deleteAll };
+export {
+  createReview,
+  findAll,
+  findForUser,
+  updateReview,
+  deleteById,
+  deleteAll,
+};

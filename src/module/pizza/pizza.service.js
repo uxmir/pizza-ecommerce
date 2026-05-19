@@ -76,7 +76,7 @@ const updateById = async (dataId, data, file) => {
     const updateData = await Pizza.findByIdAndUpdate(
       dataId,
       { ...data, image: imageUrl },
-      { returnDocument: "after", runValidators: true },
+      { new:true, runValidators: true },
     );
     return updateData;
   } catch (error) {

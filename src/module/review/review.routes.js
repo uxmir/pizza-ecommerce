@@ -5,7 +5,7 @@ import { authenticate, authorize } from "../auth/auth.middleware.js";
 router.get("/review-all/:id", ReviewController.findReview);
 /* =====protectedRoute======*/
 router.use(authenticate, authorize("user"));
-router.create("/create", ReviewController.createReview);
+router.post("/create", ReviewController.createReview);
 router.get("/review-user", ReviewController.findForUser);
 router.put("/review-update/:id", ReviewController.updateReview);
 router.delete("/delete/:id",ReviewController.deleteById)
