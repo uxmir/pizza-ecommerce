@@ -16,7 +16,7 @@ const checkoutSchema = new mongoose.Schema(
         },
         title: String,
         price: Number,
-        quantity: number,
+        quantity:Number,
       },
     ],
     totalAmount: {

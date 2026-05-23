@@ -1,4 +1,4 @@
-import ApiError from "../../common/utils/response.error";
+import ApiError from "../../common/utils/response.error.js";
 import Review from "./review.model.js";
 
 const createReview = async (userId, pizzaId,data) => {
