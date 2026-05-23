@@ -17,7 +17,7 @@ const createCart = async (userId, dataId) => {
     const createdData = await Cart.create({
       user: userId,
       pizza: dataId,
-      price: Math.round(discountPrice),
+      price: Math.round(discountPrice), 
     });
     return createdData;
   } catch (error) {
