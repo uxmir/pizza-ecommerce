@@ -68,7 +68,17 @@ const initialPayment = async (userId, data) => {
     throw ApiError.badRequest(`Error is ${error?.message}`);
   }
 };
-
-export {
-initialPayment,
-}
+const successPayment = async (transId) => {
+  try {
+    const order = await checkout.findById(transId);
+    if (!order) throw ApiError.notFound("pizza id is not found");
+    if (order?.status === "Pending") {
+      order.status = "Paid";
+      await order.save();
+    }
+    return order;
+  } catch (error) {
+    throw ApiError.badRequest(`Error is ${error?.message}`);
+  }
+};
+export { initialPayment, successPayment };
