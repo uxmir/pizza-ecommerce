@@ -1,10 +1,10 @@
 import express from 'express'
-
-const router=express.Router()
+const router = express.Router()
 import * as Checkoutcontroller from './checkout.controller.js'
-import { authenticate,authorize } from '../auth/auth.middleware.js'
+import { authenticate, authorize } from '../auth/auth.middleware.js'
 
-router.post('/checkout',authenticate,authorize("user"),Checkoutcontroller.checkout)
-router.post('/checkout/success/:id',Checkoutcontroller.successPayment)
-router.post('/checkout/fail',Checkoutcontroller.failPayment)
-export default router
+router.post('/checkout', authenticate, authorize("user"), Checkoutcontroller.checkout);
+router.post('/checkout/success/:transId', Checkoutcontroller.successPayment);
+router.post('/checkout/fail/:transId', Checkoutcontroller.failPayment);
+
+export default router;
