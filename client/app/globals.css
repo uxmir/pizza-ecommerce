@@ -1,0 +1,163 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── TAILWIND V4 THEME CONFIGURATION ─── */
+@theme inline {
+  /* নেক্সট-জেএস লেআউটের Geist ফন্ট দুটিকে ম্যাপ করা হলো */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* আপনার কাস্টম কালার ও ভেরিয়েবলগুলোকে Tailwind ক্লাসে রূপান্তর */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --color-crust: hsl(var(--crust));
+  --color-charcoal: hsl(var(--charcoal));
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 30s linear infinite;
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+}
+
+:root {
+  --background: 36 40% 97%;
+  --foreground: 20 30% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 30% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 30% 12%;
+
+  /* Tomato red */
+  --primary: 8 78% 52%;
+  --primary-foreground: 40 50% 98%;
+  --primary-glow: 14 92% 62%;
+
+  /* Mustard yellow */
+  --secondary: 38 92% 55%;
+  --secondary-foreground: 20 40% 14%;
+
+  --muted: 36 25% 92%;
+  --muted-foreground: 25 12% 42%;
+
+  /* Basil green */
+  --accent: 95 38% 42%;
+  --accent-foreground: 40 50% 98%;
+
+  --destructive: 0 78% 52%;
+  --destructive-foreground: 40 50% 98%;
+
+  --border: 30 20% 88%;
+  --input: 30 20% 88%;
+  --ring: 8 78% 52%;
+  --radius: 1rem;
+
+  --crust: 32 55% 60%;
+  --charcoal: 20 25% 14%;
+
+  --sidebar-background: 20 25% 14%;
+  --sidebar-foreground: 36 30% 88%;
+  --sidebar-primary: 8 78% 52%;
+  --sidebar-primary-foreground: 40 50% 98%;
+  --sidebar-accent: 20 25% 20%;
+  --sidebar-accent-foreground: 36 30% 92%;
+  --sidebar-border: 20 25% 22%;
+  --sidebar-ring: 8 78% 52%;
+
+  /* গ্রাডিয়েন্ট ও শ্যাডো */
+  --gradient-hero: linear-gradient(135deg, hsl(8 80% 48%) 0%, hsl(20 90% 55%) 50%, hsl(38 92% 55%) 100%);
+  --gradient-warm: linear-gradient(180deg, hsl(36 60% 98%) 0%, hsl(36 40% 94%) 100%);
+  --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(36 35% 96%) 100%);
+  --shadow-warm: 0 20px 50px -20px hsl(8 78% 52% / 0.35);
+  --shadow-card: 0 8px 24px -8px hsl(20 30% 12% / 0.12);
+  --shadow-glow: 0 0 60px hsl(14 92% 62% / 0.45);
+  --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark {
+  --background: 20 25% 8%;
+  --foreground: 36 30% 94%;
+  --card: 20 25% 12%;
+  --card-foreground: 36 30% 94%;
+  --popover: 20 25% 12%;
+  --popover-foreground: 36 30% 94%;
+  --primary: 14 92% 58%;
+  --primary-foreground: 20 30% 10%;
+  --secondary: 38 80% 55%;
+  --secondary-foreground: 20 30% 10%;
+  --muted: 20 20% 16%;
+  --muted-foreground: 36 15% 65%;
+  --accent: 95 38% 48%;
+  --accent-foreground: 20 30% 10%;
+  --destructive: 0 78% 52%;
+  --destructive-foreground: 36 30% 94%;
+  --border: 20 20% 20%;
+  --input: 20 20% 20%;
+  --ring: 14 92% 58%;
+}
+
+/* ─── BASE STYLES & UTILITIES ─── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans; /* ডিফল্ট বডিতে Geist ফন্ট এক্টিভেট করা হলো */
+  }
+  /* শিরোনামগুলোতে আপনি চাইলে সেঁরেফ ফন্ট বা ডিফল্ট হেডিং ফন্ট দিতে পারেন */
+  h1, h2, h3, h4 {
+    @apply tracking-tight font-sans font-bold; 
+  }
+}
+
+@layer utilities {
+  .bg-gradient-hero { background: var(--gradient-hero); }
+  .bg-gradient-warm { background: var(--gradient-warm); }
+  .bg-gradient-card { background: var(--gradient-card); }
+  .shadow-warm { box-shadow: var(--shadow-warm); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .transition-smooth { transition: var(--transition-smooth); }
+}
+
+/* ─── KEYFRAMES ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
