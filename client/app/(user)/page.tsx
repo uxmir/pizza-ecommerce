@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 // import PizzaCard from "@/components/PizzaCard";
 // import { pizzas } from "@/data/pizzas";
 import heroPizza from "../../public/hero-pizza.jpg";
-
 const Page: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col w-full">
@@ -48,7 +47,6 @@ const Page: React.FC = () => {
                 <Link href="/menu">View menu</Link>
               </Button>
             </div>
-
             <div className="flex flex-wrap gap-6 pt-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Truck className="w-4 h-4 text-primary" /> Free delivery $25+
